@@ -9,15 +9,7 @@ unsigned int i = 0;
 
 void setup() {
   Serial.begin(9600);
-  //controle do mux (gpio55)
-  system ("echo -n \"55\" > /sys/class/gpio/export");
-  system ("echo -n \"out\" > /sys/class/gpio/gpio55/direction");
-  system ("echo -n \"strong\" > /sys/class/gpio/gpio55/drive");
-  system ("echo -n \"1\" > /sys/class/gpio/gpio55/value");
-  //sinal para o pino 13 (gpio39)
-  system ("echo -n \"39\" > /sys/class/gpio/export");
-  system ("echo -n \"out\" > /sys/class/gpio/gpio39/direction");
-  system ("echo -n \"strong\" > /sys/class/gpio/gpio39/drive");
+  setMux();
 }
 
 void loop() {
@@ -35,4 +27,16 @@ void loop() {
     i = Serial.parseInt();
     Serial.println(i);
   }
+}
+
+void setMux() {
+  //controle do mux (gpio55)
+  system ("echo -n \"55\" > /sys/class/gpio/export");
+  system ("echo -n \"out\" > /sys/class/gpio/gpio55/direction");
+  system ("echo -n \"strong\" > /sys/class/gpio/gpio55/drive");
+  system ("echo -n \"1\" > /sys/class/gpio/gpio55/value");
+  //sinal para o pino 13 (gpio39)
+  system ("echo -n \"39\" > /sys/class/gpio/export");
+  system ("echo -n \"out\" > /sys/class/gpio/gpio39/direction");
+  system ("echo -n \"strong\" > /sys/class/gpio/gpio39/drive");
 }
