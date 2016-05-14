@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    <%- include header.ejs %>
+<body>
+    <%- include nav.ejs %>
+    <div class="page-title">
+        <h1><span id="title"><%= title %></span> <a href="#" onclick="rename('#title', '<%= device.id %>');"><i class="material-icons teal-text">&#xE254;</i></a></h1>
+        <small style="display: block;">ID: <%= device.id %></small>
+        <small><a href="#" onclick="$('#limites').openModal();">Limites: <span class="limites"><%= 'Acel X: ' + device.limit_acelerometerX + ', Acel Y: ' + device.limit_acelerometerY + ', Acel Z: ' + device.limit_acelerometerZ + ', Temp: ' + device.limit_temperature + ', Piezo: ' + device.limit_piezoknock %></span> <i class="material-icons teal-text" style="font-size: 11px">&#xE254;</i></a></small>
+    </div>
+    <div class="right" style="padding-right: 20px;">
+      <% if (bridges.length) { %><a href="/devices/grafico/<%= device.id %>" target="grafico">Ver gráfico em tempo real</a><% } %>
+    </div>
+    <div style="padding: 0 20px;">
+    <table class="hoverable">
+        <thead>
+          <tr>
+              <th data-field="date">Data</th>
+              <th data-field="acelerometer"><span class="grande">Acelerômetro (X, Y, Z)</span><span class="pequeno">Acel XYZ</span></th>
+              <th data-field="temperature"><span class="grande">Temperatura</span><span class="pequeno">Temp</span></th>
+              <th data-field="piezoknock"><span class="grande">Piezoknock</span><span class="pequeno">Piezo</span></th>
+          </tr>
+        </thead>
+        <tbody>
+            <% 
+            function pad(num, size) {
+              var s = num+"";
+              while (s.length < size) s = "0" + s;
+              return s;
+            }
+
+            if (bridges.length == 0) {
+              %><tr><td colspan="4">Nenhum dado dessa ponte foi coletado!</td></tr><%
+            } else
+            for (var i = 0; i < bridges.length; i++){ 
+              var d = new Date(bridges[i]['date']);
+              var day = d.getDate();
+              var month = d.getMonth() + 1;
+              var year = d.getFullYear();
+              var date = pad(day, 2) + '/' + pad(month, 2) + '/' + year + ' - ' + pad(d.getHours(), 2) + ':' + pad(d.getMinutes(), 2) + ':' + pad(d.getSeconds(), 2);
+              var aX = bridges[i]['acelerometerX'];
+              var aY = bridges[i]['acelerometerY'];
+              var aZ = bridges[i]['acelerometerZ'];
+              var a = aX + ', ' + aY + ', ' + aZ;
+              var t = bridges[i]['temperature'];
+              var p = bridges[i]['piezoknock'];
+              %>
+              <tr><td><%= date %></td><td><%= a %></td><td><%= t %></td><td><%= p %></td></tr>
+            <% } %>
+        </tbody>
+      </table>
+      </div>
+      <%- include modals.ejs %>
+      <%- include modal_limit.ejs %>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<div id="limites" class="modal">
+	<div class="modal-content">
+		<h4>Definir os limites para envio de dados</h4>
+		<div class="row">
+            <div class="input-field col m4 s12">
+                <label for="ax" class="">Acelerômetro X</label>
+                <input type="number" id="ax" class="validate" name="ax" value="<%= device.limit_acelerometerX %>"/>
+            </div>
+            <div class="input-field col m4 s12">
+                <label for="ay" class="">Acelerômetro Y</label>
+                <input type="number" id="ay" class="validate" name="ay" value="<%= device.limit_acelerometerY %>"/>
+            </div>
+            <div class="input-field col m4 s12">
+                <label for="az" class="">Acelerômetro Z</label>
+                <input type="number" id="az" class="validate" name="az" value="<%= device.limit_acelerometerZ %>"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col m6 s12">
+                <label for="t" class="">Temperatura</label>
+                <input type="number" id="t" class="validate" name="t" value="<%= device.limit_temperature %>"/>
+            </div>
+            <div class="input-field col m6 s12">
+                <label for="p" class="">Piezoknock</label>
+                <input type="number" id="p" class="validate" name="p" value="<%= device.limit_piezoknock %>"/>
+            </div>
+        </div>
+	</div>
+	<div class="modal-footer">
+		<a href="#!" id="confirmar" class="modal-action modal-close waves-effect waves-green btn-flat" onclick="save_limits('<%= device.id %>');">Confirmar</a>
+		<a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Cancelar</a>
+	</div>
+</div>
+<script>
+	$(function(){
+		$('#limites input').keypress(function(e) {
+			if(e.which == 13) {
+				$('#limites #confirmar').click();
+			}
+		});
+	});
+</script>

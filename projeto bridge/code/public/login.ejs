@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include header.ejs %>
+<body class="teal">
+	<form method="post" action="#" onsubmit="do_login(); return false;">
+	<div class="row center" style="padding-top:60px;">
+		<div class="col s12 offset-m2 m8 offset-l3 l6">
+			<div class="card-panel">
+            <div class="valign-wrapper">
+                <div class="valign center" style="width: 100%;">
+                    <img class="circle z-depth-1 white" src="/images/ic_launcher_96_white.png" width="92" style="top: -50px; position: relative; margin:-25px;">
+                    <h5 style="font-size:1.5rem;font-weight: 300;">Acesso ao painel de controle</h5><br>
+                </div>
+            </div>
+            
+
+            <div class="row">
+                <div class="input-field col s12">
+                    <i class="mdi-email prefix"></i>
+                    <label for="email" class="">Email</label>
+                    <input type="email" id="email" class="validate" name="email"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <i class="mdi-lock prefix"></i>
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" name="pass"/>
+                    <a href="/account/ForgotPassword" onclick="alert('Crie uma conta para acessar'); return false;">Esqueceu sua senha?</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12">
+                    <div class="red-text" id="error">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12 center">
+                    <button class="signin-db btn waves-effect waves-light" id="login" type="submit"><i class="mdi-login left"></i>Entrar</button>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col s12">
+                    <a href="/account/register">Precisa de uma conta? Registre-se clicando aqui</a><br>
+                    <span style="font-size:0.7rem;">Ao criar uma conta e fazer login, eu aceito os <a href="/account/terms" target="_blank">Termos de uso</a> e a <a href="/account/privacy" target="_blank">Política de privacidade</a>.</span>
+                </div>
+            </div>
+        </div>
+		</div>
+	</div>
+	</form>
+	<script src="/js/login.js"></script>
+</body>
+<html>

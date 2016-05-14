@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Flot Examples: Real-time updates</title>
+	<link href="/css/grafico.css" rel="stylesheet" type="text/css">
+	<script language="javascript" type="text/javascript" src="/js/jquery.js"></script>
+	<script language="javascript" type="text/javascript" src="/js/jquery.flot.js"></script>
+	<script type="text/javascript">
+	var data1 = [];
+	var data2 = [];
+	var data3 = [];
+	
+	$(function() {
+
+		// We use an inline data source in the example, usually data would
+		// be fetched from a server
+
+		var totalPoints = 10;
+
+		function getRandomData() {
+
+			var data = [];
+
+			if (data.length > 0)
+				data = data.slice(1);
+
+			// Do a random walk
+
+			while (data.length < totalPoints) {
+
+				var prev = data.length > 0 ? data[data.length - 1] : 50,
+					y = prev + Math.random() * 10 - 5;
+
+				if (y < 0) {
+					y = 0;
+				} else if (y > 100) {
+					y = 100;
+				}
+
+				data.push(y);
+			}
+
+			// Zip the generated y values with the x values
+
+			var res = [];
+			for (var i = 0; i < data.length; ++i) {
+				res.push([i, data[i]])
+			}
+
+			return res;
+		}
+
+		function getRealData() {
+			$.get('/getData/<%= id %>', function(x){
+				$('#valorAtual').text(x);
+				var splited = x.split(',');
+				var v1 = splited[0];
+				var v2 = splited[1];
+				var v3 = splited[2];
+				
+				if (data1.length == totalPoints)
+					data1 = data1.slice(1);
+					
+				if (data2.length == totalPoints)
+					data2 = data2.slice(1);
+					
+				if (data3.length == totalPoints)
+					data3 = data3.slice(1);
+
+				//if (data.length < totalPoints) {
+				data1.push(v1);
+				data2.push(v2);
+				data3.push(v3);
+				//}
+				
+				var res1 = [];
+				for (var i = 0; i < data1.length; ++i) {
+					res1.push([i, data1[i]])
+				}
+				
+				var res2 = [];
+				for (var i = 0; i < data2.length; ++i) {
+					res2.push([i, data2[i]])
+				}
+				
+				var res3 = [];
+				for (var i = 0; i < data3.length; ++i) {
+					res3.push([i, data3[i]])
+				}
+				
+				plot.setData([{label: 'Acelerometer X', data: res1},{label: 'Temperature', data: res2}, {label: 'piezoknock', data: res3}]);	
+				plot.draw();
+				
+				setTimeout(update, updateInterval);
+			});
+		}
+
+		
+		// Set up the control widget
+
+		var updateInterval = 500;
+		$("#updateInterval").val(updateInterval).change(function () {
+			var v = $(this).val();
+			if (v && !isNaN(+v)) {
+				updateInterval = +v;
+				if (updateInterval < 1) {
+					updateInterval = 1;
+				} else if (updateInterval > 2000) {
+					updateInterval = 2000;
+				}
+				$(this).val("" + updateInterval);
+			}
+		});
+
+		var plot = $.plot("#placeholder", [{label: 'Acelerometer', data: getRandomData()},{label: 'Temperature', data: getRandomData()}, {label: 'piezoknock', data: getRandomData()}], {
+			series: {
+				shadowSize: 0	// Drawing is faster without shadows
+			},
+			yaxis: {
+				min: 0,
+				max: 200
+			},
+			xaxis: {
+				show: false
+			}
+		});
+
+		function update() {
+			getRealData();
+		}
+
+		update();
+
+		// Add the Flot version string to the footer
+
+		$("#footer").prepend("Flot " + $.plot.version + " &ndash; ");
+	});
+
+	</script>
+</head>
+<body>
+
+	<div id="header">
+		<small style="width: 100%; display: block; text-align: right;">ID: <%= id %></small>
+		<h2><%= name %> em tempo real</h2>
+	</div>
+
+	<div id="content">
+
+		<div class="demo-container">
+			<div id="placeholder" class="demo-placeholder"></div>
+		</div>
+
+		<p>Valor atual <span id="valorAtual"></span></p>
+
+		<p>Tempo para atualizar: <input id="updateInterval" type="text" value="" style="text-align: right; width:5em"> milissegundos</p>
+
+	</div>
+
+	<div id="footer">
+		Copyright &copy; 2015 - Fernandos
+	</div>
+
+</body>
+</html>

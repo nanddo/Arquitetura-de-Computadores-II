@@ -1,0 +1,50 @@
+﻿﻿<html>
+  <head>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load("visualization", "1", {packages:["gauge"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Label', 'Value'],
+          ['Poteciômetro', 4000]
+        ]);
+
+        var options = {
+          width: 250, height: 250,
+          redFrom: 3700, redTo: 4000,
+          yellowFrom:3000, yellowTo: 3700,
+          minorTicks: 5,
+		      max: 4000
+        };
+
+        var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
+
+        chart.draw(data, options);
+
+        setInterval(function() {
+    			var xmlhttp;
+    			if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+    			  xmlhttp=new XMLHttpRequest();
+    			}
+    			else {// code for IE6, IE5
+    			  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    			}
+    			xmlhttp.onreadystatechange=function(){
+    			  if (xmlhttp.readyState==4 && xmlhttp.status==200){
+      				var n = Number(xmlhttp.responseText);
+      				data.setValue(0, 1, n);
+      				chart.draw(data, options);
+    			  }
+    			}
+    			xmlhttp.open("GET","/getAnalogic0",true);
+    			xmlhttp.send();
+    		}, 1000);
+      }
+    </script>
+  </head>
+  <body>
+    <div id="chart_div" style="width: 250px; height: 250px;"></div>
+  </body>
+</html>

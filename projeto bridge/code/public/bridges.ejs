@@ -1,0 +1,31 @@
+<div style="padding: 0 20px;">
+<table class="hoverable">
+        <thead>
+          <tr>
+              <th data-field="id">ID</th>
+              <th data-field="name">Nome</th>
+              <th data-field="date">Data de cadastro</th>
+              <th></th>
+          </tr>
+        </thead>
+        <tbody>
+            <% 
+            function pad(num, size) {
+              var s = num+"";
+              while (s.length < size) s = "0" + s;
+              return s;
+            }
+
+            for (var i = 0; i < devices.length; i++){ 
+              var id = devices[i]['id'];
+              var t = new Date(devices[i]['date']);
+              var day = t.getDate();
+              var month = t.getMonth() + 1;
+              var year = t.getFullYear();
+              var short_id = id.substring(0,5)+'...';
+              %><tr><td><span class="grande"><%= id %></span><span class="pequeno"><%= short_id %></span></td><td onclick="rename(this, '<%= id %>');"><%= devices[i]['name'] %></td><td><%= pad(day, 2) + '/' + pad(month, 2) + '/' + year  %></td><td onclick="location.href='/devices/<%= id %>';"><i class="material-icons">&#xE417;</i></td></tr>
+            <% } %>
+        </tbody>
+      </table>
+      </div>
+      <%- include modals.ejs %>
